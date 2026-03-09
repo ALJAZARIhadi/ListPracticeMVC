@@ -1,0 +1,71 @@
+﻿@model List<ListPracticeMVC.Models.Product>
+
+@{
+    ViewData["Title"] = "Products List";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📦 List of Current Products</h2>
+        
+        <a asp-controller="Product" asp-action="ProductAdd" class="btn btn-primary shadow-sm">
+            ➕ Add a new Product
+        </a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
+                        
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="card-img-top bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 200px;">
+                                <span>📷 No Image</span>
+                            </div>
+                        }
+
+                        <div class="card-body">
+                            <h5 class="card-title text-primary fw-bold">@item.Name</h5>
+                            <h6 class="card-subtitle mb-2 text-success fw-bold fs-5">@item.Price $</h6>
+                            
+                            <p class="card-text text-muted mt-3" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                @(string.IsNullOrEmpty(item.Description) ? "No description available." : item.Description)
+                            </p>
+                        </div>
+
+                        <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center pb-3">
+                            <span class="badge bg-light text-dark border">ID: @item.Id</span>
+                            
+                            <div>
+                                <a asp-controller="Product" asp-action="ProductUpdateDelete" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm">
+                                    ✏️ Edit
+                                </a>
+                                
+                                <a asp-controller="Product" asp-action="ProductDelete" asp-route-id="@item.Id" class="btn btn-info btn-sm text-white">
+                                    ℹ️ Details
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center shadow-sm p-5 rounded-3" role="alert">
+            <h4 class="alert-heading fw-bold">No Products Found! 🛑</h4>
+            <p class="mb-0">There are no products to show, please add some products first.</p>
+        </div>
+    }
+</div>
